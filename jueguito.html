@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegaso</title>
+    <style>
+        #imagenpixelada-image {
+            filter: blur(50px); /* Ajusta el valor según lo que consideres como "mínima calidad" */
+        }
+
+        #imagenesOrdenadas img {
+            margin: 5px;
+        }
+
+        #puntuacion {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <label for="barra">Barra de Pixelación:</label>
+    <input type="range" id="barra" min="0" max="9" value="9">
+
+    <br>
+
+    <button onclick="empezarJuego()">Empezar</button>
+
+    <br>
+
+    <img id="imagenpixelada-image" src="" alt="Imagen Original" width="250" height="300">
+
+    <br>
+
+    <label for="adivinaInput">Adivina el Futbolista:</label>
+    <input type="text" id="adivinaInput" placeholder="Escribe el nombre" disabled>
+
+    <button onclick="verificarAdivinanza()">Verificar</button>
+
+    <div id="imagenesOrdenadas"></div>
+
+    <p id="puntuacion">Puntuación: 0</p>
+
+    <script>
+        const barrita = document.getElementById('barra');
+        const pixelado = document.getElementById('imagenpixelada-image');
+        const imagenesFutbolistas = [
+            "https://th.bing.com/th/id/OIP.5-YShrQ9N4DDkf9mYuX8VwHaJm?rs=1&pid=ImgDetMain",
+            "https://th.bing.com/th/id/OIP.z-bE3VGJQux72dFc4n6BhQHaFU?rs=1&pid=ImgDetMain",
+            "https://th.bing.com/th/id/OIP.NqEi1lVuF8ZEXvRRlJtx5QHaFK?rs=1&pid=ImgDetMain",
+            "https://th.bing.com/th/id/R.713b68843c93b7b6f7dd5e8095a0746c?rik=AYnxWmVGZ8n2tQ&riu=http%3a%2f%2fas00.epimg.net%2fus%2fimagenes%2f2017%2f01%2f17%2falbum%2f1484687064_373046_1484687148_album_grande.jpg&ehk=ccweaaz2aZJ2n6oVKmeNqTvsVJ2iTmqUWJ4SY4WCkHY%3d&risl=&pid=ImgRaw&r=0",
+            "https://media.gq.com.mx/photos/5e94997dbb662c00085a6826/1:1/w_2880%2cc_limit/Neymar%201.jpg",
+            "https://th.bing.com/th/id/R.93bf26d5e1b988f64c06b6fc4e5ff8f3?rik=zjc%2bO0q4DhqbLw&pid=ImgRaw&r=0",
+            "https://eststatic.com/2072/conversions/futbolistas-guapos-large.jpg",
+            "https://1.bp.blogspot.com/-Ak7J4YXVO_8/TgEn1-RO4xI/AAAAAAAAAAU/_5s0aVAnS6M/s1600/Jugador.jpg",
+            "https://th.bing.com/th/id/R.a2e9ad1d0168d39fb5338564ef39b015?rik=vnyMGLDufRjCgA&pid=ImgRaw&r=0&sres=1&sresct=1",
+            "https://th.bing.com/th/id/R.c0fbba6288397bab822b493f0820a935?rik=Z5EDYnY5aJmf6w&riu=http%3a%2f%2fgameofglam.com%2fwp-content%2fuploads%2f2020%2f01%2fGareth-Bale-min.jpg&ehk=qHPLP%2fjJRPSQLZbqBlid7hUN0ECZZH3crOrMQSkDv54%3d&risl=&pid=ImgRaw&r=0",
+            "https://th.bing.com/th/id/R.c02052ca5b197cd02e61ba58d6707b0c?rik=%2fIFxhRC3rxxdrA&pid=ImgRaw&r=0",
+            "https://th.bing.com/th/id/OIP.1r7i9BV2knJlO40SJzcM8AAAAA?rs=1&pid=ImgDetMain",
+            "https://th.bing.com/th/id/OIP.7Gg5YfDnpUhM31GezMw_EAHaEq?w=278&h=180&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.AE43p8YQsi2jncA59D-oPgHaDt?w=261&h=180&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.UQoW5wtP_2UiyQHiRS6JNwHaIX?w=151&h=180&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.gwn7yZVp3mglyr20zWQM2AHaEK?w=304&h=180&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.2h0bgjO73UHzJfie8Ow54QHaGK?w=207&h=180&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.eP6QXSiP1pD-zjp8Zb_69gHaDe?w=309&h=164&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.tRGuiNfkrcMqSmEIbn8urQHaEK?w=307&h=180&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.odZOnoZCjhSYkHU-V_ew0QHaFx?w=225&h=180&c=7&r=0&o=5&pid=1.7",
+            "https://th.bing.com/th/id/OIP.ws7uK74SOe84uLFotBG5vQHaEK?rs=1&pid=ImgDetMain"
+        ];
+
+const nombres = [
+            "Kylian Mbappe",
+            "Leonel Messi",
+            "Cristiano Ronaldo",
+            "Gerard Pique",
+            "Neymar",
+            "Ronaldinho",
+            "Gareth Bale",
+            "James Rodriguez",
+            "Zinedine Zidane",
+            "Paulo Dybala",
+            "Robert Lewandowski",
+            "Pele",
+            "Kun Aguero",
+            "Sergio Busquets",
+            "Erling Haaland",
+            "Xavi Hernandez",
+            "Angel Di Maria",
+            "Pepe"
+        ];
+
+        let imagenesMostradas = [];
+        let adivinadas = [];
+        let juegoIniciado = false;
+        let puntuacion = 0;
+        let nivelAnterior = barrita.value;
+        let valorMinimoBarra = nivelAnterior;
+
+        barrita.addEventListener('input', updatePixelation);
+        barrita.addEventListener('input', updatePuntuacionDescuento);
+
+        function updatePixelation() {
+            const pixelValue = barrita.value * 5; // Escalar el valor a un rango de 0 a 50
+            pixelado.style.filter = `blur(${pixelValue}px)`;
+        }
+
+        function updatePuntuacionDescuento() {
+            const nivelActual = barrita.value;
+            if (nivelActual < nivelAnterior) {
+                // Descuento del valor mínimo registrado
+                puntuacion -= valorMinimoBarra;
+                actualizarPuntuacion();
+            }
+            nivelAnterior = nivelActual;
+            valorMinimoBarra = Math.min(valorMinimoBarra, nivelActual);
+        }
+
+        function empezarJuego() {
+            if (!juegoIniciado) {
+                juegoIniciado = true;
+                cambiarImagen();
+                document.getElementById('adivinaInput').removeAttribute('disabled');
+            }
+        }
+
+        function cambiarImagen() {
+            // Restablecer la barra al máximo al iniciar un nuevo nivel
+            barrita.value = 9;
+            updatePixelation();
+
+            const imagenesNoMostradas = imagenesFutbolistas.filter(img => !imagenesMostradas.includes(img) && !adivinadas.includes(img));
+
+            if (imagenesNoMostradas.length === 0) {
+                alert("¡Ya has visto y adivinado todas las imágenes!");
+                return;
+            }
+
+            const imagenSiguiente = imagenesNoMostradas[0];
+            const nombreFutbolista = nombres[imagenesFutbolistas.indexOf(imagenSiguiente)];
+            console.log("Jugador actual:", nombreFutbolista);
+            pixelado.src = imagenSiguiente;
+            imagenesMostradas.push(imagenSiguiente);
+        }
+
+        function verificarAdivinanza() {
+            const adivinaInput = document.getElementById('adivinaInput').value.trim();
+            const indiceImagen = imagenesMostradas.findIndex(img => img === pixelado.src);
+            const nombreFutbolista = nombres[indiceImagen];
+            if (adivinaInput.toLowerCase() === nombreFutbolista.toLowerCase()) {
+                alert("¡Correcto! ¡Ganaste 50 puntos!");
+                adivinadas.push(pixelado.src);
+                puntuacion += 50;
+                actualizarPuntuacion();
+            } else {
+                alert("Incorrecto. Vuelve a intentarlo.");
+                // Restar 20 puntos al no adivinar
+                puntuacion = Math.max(0, puntuacion - 20);
+                actualizarPuntuacion();
+            }
+            cambiarImagen();
+        }
+
+        function actualizarPuntuacion() {
+            document.getElementById('puntuacion').innerText = `Puntuación: ${puntuacion}`;
+        }
+    </script>
+
+</body>
+</html>
