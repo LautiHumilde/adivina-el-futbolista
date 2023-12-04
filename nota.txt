@@ -42,3 +42,16 @@ const nombres = [
             "Angel Di Maria",
             "Pepe"
         ];
+
+la barra no pixela la imagen
+no cuanta los puntos al bajar la barra
+las imagenes no coiniden con el nombres
+no resta puntos al equibocarme
+el valor de la barra no coicide con los puntos restantes
+no aparecen las imagenes
+
+hay que crear un boton de empezar
+hay que crear las cuadrillas
+crear una funcion para actualizar los puntos
+tengo q dividir mi imagen en muchos cuadrados
+no me deja ver solo 1 cuadrado de mi imagen 
