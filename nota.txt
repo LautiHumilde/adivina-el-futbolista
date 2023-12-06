@@ -1,4 +1,4 @@
-const imagenesFutbolistas = [
+        const imagenesFutbolistas = [
             "https://th.bing.com/th/id/OIP.5-YShrQ9N4DDkf9mYuX8VwHaJm?rs=1&pid=ImgDetMain",
             "https://th.bing.com/th/id/OIP.z-bE3VGJQux72dFc4n6BhQHaFU?rs=1&pid=ImgDetMain",
             "https://th.bing.com/th/id/OIP.NqEi1lVuF8ZEXvRRlJtx5QHaFK?rs=1&pid=ImgDetMain",
@@ -22,12 +22,15 @@ const imagenesFutbolistas = [
             "https://th.bing.com/th/id/OIP.ws7uK74SOe84uLFotBG5vQHaEK?rs=1&pid=ImgDetMain"
         ];
 
-const nombres = [
+        const nombres = [
             "Kylian Mbappe",
-            "Leonel Messi",
+            "Lionel Messi",
             "Cristiano Ronaldo",
             "Gerard Pique",
             "Neymar",
+            "Ronaldo Nazario",
+            "Olivier Giroud",
+            "Kaka",
             "Ronaldinho",
             "Gareth Bale",
             "James Rodriguez",
